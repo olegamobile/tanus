@@ -118,7 +118,7 @@ async def handle_voice(update: Update, context: CallbackContext):
   now = datetime.now(moscow_tz)
   date_string = now.strftime('%Y-%m-%d')
   time_string = now.strftime('%H:%M:%S')
-  file_name = f"{date_string}_{time_string}.ogg"
+  file_name = f"voices/{date_string}_{time_string}.ogg"
   await audio_file.download_to_drive(file_name)
 
   # Загрузка аудио и обрезка до 5 секунд
