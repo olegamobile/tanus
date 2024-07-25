@@ -114,11 +114,15 @@ async def handle_voice(update: Update, context: CallbackContext):
   output_io.seek(0)
   audio_file_bytes = output_io
   '''
-
-  await audio_file.download_to_drive('voice.ogg')
+  moscow_tz = pytz.timezone('Europe/Moscow')
+  now = datetime.now(moscow_tz)
+  date_string = now.strftime('%Y-%m-%d')
+  time_string = now.strftime('%H:%M:%S')
+  file_name = f"{date_string}_{time_string}.ogg"
+  await audio_file.download_to_drive(file_name)
 
   # Загрузка аудио и обрезка до 5 секунд
-  audio = AudioSegment.from_file('voice.ogg')
+  audio = AudioSegment.from_file(file_name)
   audio = audio[:3000]  # Обрезка до первых 5 секунд
 
   # Ускорение в 2 раза
@@ -133,7 +137,7 @@ async def handle_voice(update: Update, context: CallbackContext):
   audio_file_bytes = bytearray(audio_file_data)
 
   # Удаление временных файлов
-  os.remove('voice.ogg')
+  #os.remove('voice.ogg')
   os.remove('processed_voice.opus')
 
   headers = {
