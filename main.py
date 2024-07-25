@@ -172,8 +172,6 @@ async def handle_voice(update: Update, context: CallbackContext):
 
 
 async def restart(update: Update, context: CallbackContext):
-  context.chat_data['mode'] = 'NORMAL'
-  context.chat_data['dialogue_count'] = 0
   await update.message.reply_text("ухх бля ебать")
 
 
@@ -195,6 +193,13 @@ async def handle_message(update: Update, context: CallbackContext):
   voice_file = InputFile(io.BytesIO(binary_data), filename="voice.opus")
   # Отправка голосового сообщения
   await update.message.reply_voice(voice=voice_file)
+  return
+
+
+async def handle_start(update: Update, context: CallbackContext):
+  with open("starttext.txt", 'r') as file:
+    starttext = file.read()
+  await update.message.reply_text(starttext)
   return
 
 
@@ -230,7 +235,7 @@ async def chat_with_gpt(prompt):
 def main():
   application = Application.builder().token(TOKEN).build()
 
-  application.add_handler(CommandHandler("start", restart))
+  application.add_handler(CommandHandler("start", handle_start))
   application.add_handler(CommandHandler("restart", restart))
   # application.add_handler(
   #     MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
